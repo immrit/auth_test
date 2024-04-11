@@ -44,19 +44,26 @@ class SigninPage extends StatelessWidget {
             ElevatedButton(
               child: const Text('ثبت نام'),
               onPressed: () {
-                signIn(username.text, pass.text);
+                signIn(username.text, pass.text , context);
 
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Detail(
-                              user: username.text,
-                            )));
               },
             ),
           ],
         ),
       ),
     );
+  }
+
+  bool _validateCredentials() {
+    if (username.text.isEmpty) {
+      return false;
+    }
+    if (pass.text.isEmpty) {
+      return false;
+    }
+
+    // بررسی اطلاعات با پایگاه داده
+
+    return true;
   }
 }

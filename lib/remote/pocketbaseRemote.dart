@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 
-final pb = PocketBase('http://10.0.2.2:8089/');
+import '../screens/detail.dart';
+
+final pb = PocketBase('http://10.0.2.2:8090');
 
 Future<void> signUp(
   String username,
@@ -21,8 +24,14 @@ Future<void> signUp(
 Future<void> signIn(
   String username,
   String pass,
+    BuildContext context
 ) async {
   final authData =
-      await pb.collection('users').authWithPassword(username, pass);
+      await pb.collection('users').authWithPassword(username, pass).then((value) => Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Detail(
+                user: username.toString(),
+              ))));
   print(authData);
 }
