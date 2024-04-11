@@ -1,11 +1,23 @@
 import 'package:auth_test/remote/pocketbaseRemote.dart';
 import 'package:auth_test/screens/detail.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SigninPage extends StatelessWidget {
+class SigninPage extends StatefulWidget {
+  @override
+  State<SigninPage> createState() => _SigninPageState();
+}
+
+class _SigninPageState extends State<SigninPage> {
   TextEditingController username = TextEditingController();
+
   // TextEditingController email = TextEditingController();
   TextEditingController pass = TextEditingController();
+  storetheToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', '${pb.authStore.token}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,8 +56,9 @@ class SigninPage extends StatelessWidget {
             ElevatedButton(
               child: const Text('ثبت نام'),
               onPressed: () {
-                signIn(username.text, pass.text , context);
-
+                signIn(username.text, pass.text, context);
+                print(pb.authStore.token.toString());
+                storetheToken();
               },
             ),
           ],

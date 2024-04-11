@@ -3,7 +3,7 @@ import 'package:pocketbase/pocketbase.dart';
 
 import '../screens/detail.dart';
 
-final pb = PocketBase('http://10.0.2.2:8090');
+final pb = PocketBase('http://10.0.2.2:8089');
 
 Future<void> signUp(
   String username,
@@ -21,17 +21,15 @@ Future<void> signUp(
   print(record);
 }
 
-Future<void> signIn(
-  String username,
-  String pass,
-    BuildContext context
-) async {
-  final authData =
-      await pb.collection('users').authWithPassword(username, pass).then((value) => Navigator.pushReplacement(
+Future<void> signIn(String username, String pass, BuildContext context) async {
+  final authData = await pb
+      .collection('users')
+      .authWithPassword(username, pass)
+      .then((value) => Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) => Detail(
-                user: username.toString(),
-              ))));
+                    user: username.toString(),
+                  ))));
   print(authData);
 }
