@@ -18,14 +18,13 @@ class _SolashScreenState extends State<SolashScreen> {
   getToken() async {
     final pref = await SharedPreferences.getInstance();
     token = pref.getString('token');
-    id = pref.getString('id');
     print(token);
   }
 
   @override
   void initState() {
     getToken();
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => token == null ? SigninPage() : Detail()));
     });
@@ -35,7 +34,7 @@ class _SolashScreenState extends State<SolashScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(
+      child: const Center(
         child: Text("Splashhhh"),
       ),
     );

@@ -16,7 +16,6 @@ class _SigninPageState extends State<SigninPage> {
   storetheToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', pb.authStore.token);
-    await prefs.setString('id', pb.authStore.model.id);
   }
 
   @override

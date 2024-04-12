@@ -27,11 +27,19 @@ Future<void> signIn(String username, String pass, BuildContext context) async {
       .collection('users')
       .authWithPassword(username, pass)
       .then((value) => Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Detail())));
+          context,
+          MaterialPageRoute(
+              builder: (context) => Detail(
+                    user: users().toString(),
+                  ))))
+      .then((value) => pb.authStore.model.id);
   print(authData);
 }
 
-Future<void> users() async {
-  final record =
-      await pb.collection('users').getOne('9f9uruez4p63w71', fields: 'name');
+Future<RecordModel> users() async {
+  String id = pb.authStore.model.id;
+  print("id users= $id");
+  final record = await pb.collection('users').getOne(id, fields: 'username');
+  print("users cons $record");
+  return record;
 }

@@ -15,7 +15,6 @@ class _DetailState extends State<Detail> {
   removeToken() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('token');
-    prefs.remove('id');
   }
 
   @override
@@ -25,7 +24,7 @@ class _DetailState extends State<Detail> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(widget.user.toString()),
+            Text("A"),
             FloatingActionButton(onPressed: () {
               removeToken();
               Navigator.pushReplacement(context,
