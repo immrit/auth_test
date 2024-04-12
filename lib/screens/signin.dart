@@ -15,7 +15,8 @@ class _SigninPageState extends State<SigninPage> {
   TextEditingController pass = TextEditingController();
   storetheToken() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', '${pb.authStore.token}');
+    await prefs.setString('token', pb.authStore.token);
+    await prefs.setString('id', pb.authStore.model.id);
   }
 
   @override
@@ -57,7 +58,6 @@ class _SigninPageState extends State<SigninPage> {
               child: const Text('ثبت نام'),
               onPressed: () {
                 signIn(username.text, pass.text, context);
-                print(pb.authStore.token.toString());
                 storetheToken();
               },
             ),
