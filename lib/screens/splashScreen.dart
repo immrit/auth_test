@@ -14,7 +14,6 @@ class SolashScreen extends StatefulWidget {
 
 class _SolashScreenState extends State<SolashScreen> {
   var token;
-  var id;
   getToken() async {
     final pref = await SharedPreferences.getInstance();
     token = pref.getString('token');
@@ -26,7 +25,7 @@ class _SolashScreenState extends State<SolashScreen> {
     getToken();
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => token == null ? SigninPage() : Detail()));
+          builder: (context) => token == null ? MyHomePage() : Detail()));
     });
     super.initState();
   }

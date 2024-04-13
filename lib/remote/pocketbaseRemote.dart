@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screens/detail.dart';
 
-final pb = PocketBase('http://10.0.2.2:8090');
+final pb = PocketBase('http://10.0.2.2:8089');
 
 Future<void> signUp(
   String username,
@@ -23,23 +23,22 @@ Future<void> signUp(
 }
 
 Future<void> signIn(String username, String pass, BuildContext context) async {
+  Map<String, dynamic> body = {};
   final authData = await pb
       .collection('users')
-      .authWithPassword(username, pass)
-      .then((value) => Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Detail(
-                    user: users().toString(),
-                  ))))
-      .then((value) => pb.authStore.model.id);
-  print(authData);
+      .authWithPassword(username, pass, fields: '?fields=*', body: body);
+  print("==============================");
+  print(body);
+  // Navigator.pushReplacement(
+  //     context, MaterialPageRoute(builder: (context) => Detail())));
 }
 
-Future<RecordModel> users() async {
-  String id = pb.authStore.model.id;
-  print("id users= $id");
-  final record = await pb.collection('users').getOne(id, fields: 'username');
-  print("users cons $record");
-  return record;
-}
+// Future<RecordModel> users(String? idb) async {
+//   final String id = pb.authStore.model.id;
+//   idb = id;
+//   print("id users= $id");
+//   final record = await pb.collection('users').getOne(id);
+//   final username = record.getDataValue<String>('username');
+//   print("users cons $record");
+//   return record;
+// }

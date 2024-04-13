@@ -54,7 +54,7 @@ class _SigninPageState extends State<SigninPage> {
 
             const SizedBox(height: 10),
             ElevatedButton(
-              child: const Text('ثبت نام'),
+              child: const Text('ورود'),
               onPressed: () {
                 signIn(username.text, pass.text, context);
                 storetheToken();
@@ -64,18 +64,5 @@ class _SigninPageState extends State<SigninPage> {
         ),
       ),
     );
-  }
-
-  bool _validateCredentials() {
-    if (username.text.isEmpty) {
-      return false;
-    }
-    if (pass.text.isEmpty) {
-      return false;
-    }
-
-    // بررسی اطلاعات با پایگاه داده
-
-    return true;
   }
 }
