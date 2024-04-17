@@ -1,8 +1,8 @@
 import 'package:auth_test/model/dataModel.dart';
+import 'package:auth_test/remote/pocketbaseRemote.dart';
 import 'package:auth_test/screens/signin.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Detail extends StatefulWidget {
@@ -23,45 +23,17 @@ class _DetailState extends State<Detail> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: FutureBuilder(
-            future: Hive.openBox('userBox'),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasError) {
-                  return Text(snapshot.error.toString());
-                } else {
-                  final box = Hive.box('userBox');
-                  final user = box.get('user');
-
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(user),
-                      FloatingActionButton(onPressed: () {
-                        removeToken();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SigninPage()));
-                      })
-                    ],
-                  );
-                }
-              } else
-                return CircularProgressIndicator();
-            }),
-        // child: Column(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     Text('user.toString()'),
-        //     FloatingActionButton(onPressed: () {
-        //       removeToken();
-        //       Navigator.pushReplacement(context,
-        //           MaterialPageRoute(builder: (context) => SigninPage()));
-        //     })
-
-        //   ],
-        // ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("A"),
+            FloatingActionButton(onPressed: () {
+              removeToken();
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => SigninPage()));
+            })
+          ],
+        ),
       ),
     );
   }

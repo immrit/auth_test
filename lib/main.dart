@@ -1,15 +1,12 @@
 import 'package:auth_test/screens/signin.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'model/HiveModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'screens/signup.dart';
 import 'screens/splashScreen.dart';
 
-void main() async {
+void main() {
   runApp(const MyApp());
-  await Hive.initFlutter();
-  Hive.registerAdapter(HiveModelAdapter());
-  Hive.openBox<HiveModel>('userBox');
 }
 
 class MyApp extends StatelessWidget {

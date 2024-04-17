@@ -1,6 +1,6 @@
 import 'package:auth_test/remote/pocketbaseRemote.dart';
+import 'package:auth_test/screens/detail.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SigninPage extends StatefulWidget {
@@ -55,15 +55,9 @@ class _SigninPageState extends State<SigninPage> {
             const SizedBox(height: 10),
             ElevatedButton(
               child: const Text('ورود'),
-              onPressed: () async {
+              onPressed: () {
                 signIn(username.text, pass.text, context);
                 storetheToken();
-                var box = await Hive.openBox('userBox');
-                box.add(user.username);
-                final usersss = box.get(user);
-                print("/\/\/\/\/\/\/\/");
-                print(usersss);
-                print("/\/\/\/\/\/\/\/");
               },
             ),
           ],
