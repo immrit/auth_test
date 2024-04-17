@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,23 +24,59 @@ Future<void> signUp(
   print(record);
 }
 
-Future<void> signIn(String username, String pass, BuildContext context) async {
-  Map<String, dynamic> body = {};
-  final authData = await pb
-      .collection('users')
-      .authWithPassword(username, pass, fields: '?fields=*', body: body);
-  print("==============================");
-  print(body);
-  // Navigator.pushReplacement(
-  //     context, MaterialPageRoute(builder: (context) => Detail())));
+class User {
+  String username;
+  String email;
+  String name;
+  User({
+    required this.username,
+    required this.email,
+    required this.name,
+  });
+  factory User.fromRecordModel(RecordModel recordModel) {
+    Map<String, dynamic> json = recordModel.toJson();
+    return User(
+      username: json['username'] ?? '',
+      email: json['email'] ?? '',
+      name: json['name'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'username': username,
+      'email': email,
+      'name': name,
+    };
+  }
+
+  // Deserialize User object from Map
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      username: json['username'] ?? '',
+      email: json['email'] ?? '',
+      name: json['name'] ?? '',
+    );
+  }
 }
 
-// Future<RecordModel> users(String? idb) async {
-//   final String id = pb.authStore.model.id;
-//   idb = id;
-//   print("id users= $id");
-//   final record = await pb.collection('users').getOne(id);
-//   final username = record.getDataValue<String>('username');
-//   print("users cons $record");
-//   return record;
-// }
+Future<void> signIn(String username, String pass, BuildContext context) async {
+  try {
+    await pb.collection('users').authWithPassword(username, pass);
+    RecordModel recordModel = pb.authStore.model;
+    User user = User.fromRecordModel(recordModel);
+    print(user.username);
+    print(user.email);
+    print(user.name);
+    print(pb.authStore.model);
+    var token = pb.authStore.token;
+    print('token:  $token');
+    print(pb.authStore.isValid);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user', jsonEncode(user.toJson()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => Detail()));
+  } catch (e) {
+    print(e);
+  }
+}
