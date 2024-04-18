@@ -1,22 +1,25 @@
 import 'dart:convert';
 
+import 'package:auth_test/model/UserModel.dart';
 import 'package:auth_test/screens/signin.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../remote/pocketbaseRemote.dart';
 
 class Detail extends StatefulWidget {
-  final User? user;
+  final UserModel? userModel;
 
-  const Detail({Key? key, this.user}) : super(key: key);
+  const Detail({Key? key, this.userModel}) : super(key: key);
 
   @override
   _DetailScreenState createState() => _DetailScreenState();
 }
 
 class _DetailScreenState extends State<Detail> {
-  late User _user;
+  // late User _user;
+  late UserModel _model;
   removeToken() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('token');
@@ -25,24 +28,23 @@ class _DetailScreenState extends State<Detail> {
   @override
   void initState() {
     super.initState();
-    if (widget.user != null) {
-      _user = widget.user!;
+    if (widget.userModel != null) {
+      _model = widget.userModel!;
     } else {
-      _user = User(
-          username: '', email: '', name: ''); // Initialize with default values
+      _model = UserModel('', ''); // Initialize with default values
       _getUserData();
     }
   }
 
-  Future<void> _getUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userData = prefs.getString('user');
+  _getUserData() async {
+    // final prefs = await SharedPreferences.getInstance();
+    // final userData = prefs.getString('user');
+    final box = HiveGetData.getUserModel();
+    final userData = box.get('user');
     if (userData != null) {
-      setState(() {
-        _user = User.fromJson(jsonDecode(userData));
-      });
     } else {
       // Handle the case where user data is null
+      print("user data is null");
       // For example, you can show an error message or navigate back
     }
   }
@@ -53,14 +55,13 @@ class _DetailScreenState extends State<Detail> {
       appBar: AppBar(
         title: Text('User Detail'),
       ),
-      body: _user != null
+      body: _model != null
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Username: ${_user.username}'),
-                  Text('Email: ${_user.email}'),
-                  Text('Name: ${_user.name}'),
+                  Text('Username: ${_model.username}'),
+                  Text('Email: ${_model.email}'),
                   FloatingActionButton(onPressed: () {
                     removeToken();
                     Navigator.pushReplacement(context,

@@ -1,11 +1,16 @@
+import 'package:auth_test/model/UserModel.dart';
 import 'package:auth_test/screens/signin.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/signup.dart';
 import 'screens/splashScreen.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserModelAdapter());
+  await Hive.openBox<UserModel>('userBox');
   runApp(const MyApp());
 }
 
