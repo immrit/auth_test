@@ -1,9 +1,7 @@
-import 'dart:convert';
-
+import 'package:auth_test/main.dart';
 import 'package:auth_test/model/UserModel.dart';
 import 'package:auth_test/screens/signin.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../remote/pocketbaseRemote.dart';
@@ -21,8 +19,10 @@ class _DetailScreenState extends State<Detail> {
   // late User _user;
   late UserModel _model;
   removeToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove('token');
+    // final prefs = await SharedPreferences.getInstance();
+    // prefs.remove('token');
+    final box = HiveGetData.getUserModel();
+    box.delete('user');
   }
 
   @override
@@ -31,17 +31,20 @@ class _DetailScreenState extends State<Detail> {
     if (widget.userModel != null) {
       _model = widget.userModel!;
     } else {
-      _model = UserModel('', ''); // Initialize with default values
+      _model =
+          UserModel(username: '', email: ''); // Initialize with default values
       _getUserData();
     }
   }
 
   _getUserData() async {
-    // final prefs = await SharedPreferences.getInstance();
-    // final userData = prefs.getString('user');
     final box = HiveGetData.getUserModel();
-    final userData = box.get('user');
+    var userData = box.get('user');
+
     if (userData != null) {
+      setState(() {
+        _model = userData;
+      });
     } else {
       // Handle the case where user data is null
       print("user data is null");
@@ -65,7 +68,7 @@ class _DetailScreenState extends State<Detail> {
                   FloatingActionButton(onPressed: () {
                     removeToken();
                     Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => SigninPage()));
+                        MaterialPageRoute(builder: (context) => MyHomePage()));
                   })
                 ],
               ),

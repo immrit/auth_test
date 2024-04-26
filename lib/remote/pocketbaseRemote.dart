@@ -1,14 +1,11 @@
-import 'dart:convert';
-
 import 'package:auth_test/model/UserModel.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screens/detail.dart';
 
-final pb = PocketBase('http://10.0.2.2:8089');
+final pb = PocketBase('http://10.0.2.2:8090');
 
 Future<void> signUp(
   String username,
@@ -67,7 +64,10 @@ Future<void> signIn(String username, String pass, BuildContext context) async {
     await pb.collection('users').authWithPassword(username, pass);
     RecordModel recordModel = pb.authStore.model;
     User user = User.fromRecordModel(recordModel);
-    var usermodel = UserModel(user.email, user.username);
+    var usermodel = UserModel(
+      username: user.username,
+      email: user.email,
+    );
 
     print(user.username);
     print(user.email);
@@ -76,12 +76,10 @@ Future<void> signIn(String username, String pass, BuildContext context) async {
     var token = pb.authStore.token;
     print('token:  $token');
     print(pb.authStore.isValid);
-    // final prefs = await SharedPreferences.getInstance();
-    // await prefs.setString('user', jsonEncode(user.toJson()));
+
     final box = HiveGetData.getUserModel();
-    final pppp = box.put('user', usermodel);
-    print("//////////77777777777777");
-    print(pppp.toString());
+    box.put('user', usermodel);
+
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => Detail()));
   } catch (e) {
